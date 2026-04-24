@@ -1,0 +1,37 @@
+1. The OFF and frcmod files for the DNA 2-aminopurin nucleotide was download from bryce group website: http://amber.manchester.ac.uk/
+
+2. For RNA new files R2AP.off and frmod.R2AP are created. The second file is identical to that of DNA. In the first file, the parameters for Adenine ribonucleotide, 3’-and 5’-Adenine ribonucleotide were copied and pasted, from the RNA.lib file of AmberTools23
+
+3. The atom block for the 2-aminopurine (base only) is copied from the DNA file and pasted on R2AP.off file
+
+4. The charges were corrected following the published work: https://pubs.acs.org/doi/full/10.1021/acs.jpcb.8b12172
+
+5. The bonds are corrected in the connectivity section of the off file
+
+6. Coordinates of the 2-aminopurine (base only) are copied from the DNA file and pasted on R2AP.off file
+
+7. To make the charge a whole number in the case of the 3’-residue, the 3 terminal oxygen atom’s negative charge is increased approximately by 0.037. This is needed because the Charges from the paper are only for the non-terminal nucleotide.
+
+8. The 2AP dinucleotide structure and the AMBER parameter and topology files are prepared with a tleap script. 
+
+	source leaprc.RNA.OL3
+	source leaprc.water.tip3p
+	loadOff R2AP.off
+	loadamberparams frcmod.R2AP
+	dinic = sequence { RA5 R2AP }
+	solvatebox dinic SPCBOX 10 iso
+	addions dinic Na+ 0
+	savepdb dinic dinic_solv.pdb
+	saveamberparm dinic dinic_solv.prmtop dinic_solv.inpcrd
+	quit
+
+9. The system is solvated and 1 Na+ ion is added for neutralization (same tleap script)
+
+10. Parmed was used to convert the amber files to gromacs files
+
+	import parmed as pmd
+	dinic = pmd.load_file("dinic_solv.prmtop","dinic_solv.inpcrd")
+	dinic.save("dinic_solvated.top", format='gromacs')
+	dinic.save("dinic_solvated.gro")
+
+11. Minimization, NPT equilibration, and NVT production are run with gromacs. 
