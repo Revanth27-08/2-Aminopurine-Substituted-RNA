@@ -1,0 +1,17 @@
+source leaprc.RNA.OL3
+source leaprc.water.tip3p
+loadOff R2AP.off
+loadamberparams frcmod.R2AP
+
+dinic = sequence { RA5 RA3 }
+
+solvatebox dinic SPCBOX 10 iso
+addions dinic Na+ 0
+addions dinic Na+ 7
+addions dinic Cl- 7
+
+savepdb dinic dinic_solv.pdb
+
+saveamberparm dinic dinic_solv.prmtop dinic_solv.inpcrd
+
+quit

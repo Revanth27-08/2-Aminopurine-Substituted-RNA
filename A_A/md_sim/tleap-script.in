@@ -1,0 +1,15 @@
+source leaprc.RNA.OL3
+source leaprc.water.tip3p
+
+dinic = sequence { A5 A3 }
+
+solvatebox dinic SPCBOX 10 iso
+addions dinic Na+ 0
+addions dinic Na+ 8
+addions dinic Cl- 8
+
+savepdb dinic dinic_solv.pdb
+
+saveamberparm dinic dinic_solv.prmtop dinic_solv.inpcrd
+
+quit
